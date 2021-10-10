@@ -1,0 +1,36 @@
+.ShareLeaderboard {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  backdrop-filter: blur(3px) brightness(0.3);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.ShareBtns {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.ShareLeaderboard > div:hover {
+  /* transform: translateY(-3px); */
+}
+
+@media only screen and (max-width: 40em) {
+  .ShareLeaderboard {
+  }
+}

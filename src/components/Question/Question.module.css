@@ -1,0 +1,19 @@
+.Question {
+  /* background-color: rgba(255, 255, 255, 0.9); */
+  /* padding: 4rem; */
+  border-radius: 0.2rem;
+  max-width: 37rem;
+}
+
+.Question p {
+  margin-bottom: 1rem;
+}
+
+.Wrapper {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.Wrapper h3 {
+  margin: 1rem 0;
+}

@@ -1,0 +1,14 @@
+.SelectField {
+  /* appearance: none; */
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.7rem;
+  font-family: "Barlow", sans-serif;
+  color: orange;
+  border-color: orange;
+}
+
+.SelectField option {
+  color: rgb(85, 85, 85);
+  font-family: "Barlow", sans-serif;
+}

@@ -1,25 +1,98 @@
-import logo from './logo.svg';
-import './App.css';
+// Library componens imports
+import React, { Component } from "react";
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+// Component imports
+import IntroPage from "./components/IntroPage/IntroPage";
+import Hero from "./components/Hero/Hero";
+import Questions from "./containers/Questions/Questions";
+import Preferences from "./components/Preferences/Preferences";
+import AppContext from "./Contexts/AppContext";
+import Results from "./components/Results/Results";
+import Leaderboard from "./components/Leaderboard/Leaderboard";
+import AuthorInfo from "./components/AuthorInfo/AuthorInfo";
+
+// CSS imports
+import "./App.css";
+
+class App extends Component {
+  state = {
+    userInfoSubmitted: false,
+    username: null,
+    noOfQuestions: null,
+    quizTrack: null,
+    URLToFetch: null,
+    difficulty: null,
+    selectType: null,
+    finalScore: null,
+    tracksAndTheirIDs: null,
+    userId: null,
+  };
+
+  setStateFromPreferences = (payload) => {
+    this.setState({
+      userInfoSubmitted: payload.userInfoSubmitted,
+      username: payload.username,
+      quizTrack: payload.quizTrack,
+      URLToFetch: payload.URLToFetch,
+      difficulty: payload.difficulty,
+      noOfQuestions: payload.noOfQuestions,
+      selectType: payload.selectType,
+      tracksAndTheirIDs: payload.tracksAndTheirIDs,
+      userId: payload.userId,
+    });
+  };
+
+  setStateFromQuestions = (payload) => {
+    this.setState({
+      finalScore: payload.finalScore,
+    });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <AppContext.Provider
+          value={{
+            userInfoSubmitted: this.state.userInfoSubmitted,
+            username: this.state.username,
+            quizTrack: this.state.quizTrack,
+            URLToFetch: this.state.URLToFetch,
+            noOfQuestions: this.state.noOfQuestions,
+            difficulty: this.state.difficulty,
+            selectType: this.state.selectType,
+            tracksAndTheirIDs: this.state.tracksAndTheirIDs,
+            finalScore: this.state.finalScore,
+            userId: this.state.userId,
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          <Switch>
+            <Route exact path="/" component={Hero} />
+            <Route path="/intro" component={IntroPage} />
+            <Route
+              path="/preferences"
+              render={() => (
+                <Preferences pullData={this.setStateFromPreferences} />
+              )}
+            />
+            <Route
+              path="/questions"
+              render={() => (
+                <Questions
+                  pullData={this.setStateFromQuestions}
+                  URLToFetch={this.state.URLToFetch}
+                />
+              )}
+            />
+            <Route path="/results" component={Results} />
+            <Route path="/leaderboard" component={Leaderboard} />
+            <Redirect from="/" to="/" />
+          </Switch>
+          <AuthorInfo />
+        </AppContext.Provider>
+      </div>
+    );
+  }
 }
 
-export default App;
+export default withRouter(App);

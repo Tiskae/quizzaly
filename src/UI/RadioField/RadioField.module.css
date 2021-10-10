@@ -1,0 +1,54 @@
+.RadioField {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.RadioInput {
+    position: relative;
+    appearance: none;
+}
+
+.RadioInput::before,
+.RadioInput::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    content: "";
+
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+.RadioInput::before {
+    height: 1rem;
+    width: 1rem;
+}
+
+.RadioInput.Primary::before {
+    border: 1px solid green;
+}
+
+.RadioInput.Secondary::before {
+    border: 1px solid orange;
+}
+
+.RadioInput::after {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: white;
+    transition: all 0.2s;
+}
+
+.RadioInput.Primary:checked::after {
+    background-color: green;
+}
+
+.RadioInput.Secondary:checked::after {
+    background-color: orange;
+}
+
+.RadioLabel {
+    font-size: 1rem;
+    color: grey;
+}

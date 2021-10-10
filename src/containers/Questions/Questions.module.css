@@ -1,0 +1,76 @@
+.Questions {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #86fa86;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%23084e08' stroke-width='7.2' stroke-opacity='0.21' %3E%3Ccircle fill='%2386fa86' cx='0' cy='0' r='1800'/%3E%3Ccircle fill='%2381f680' cx='0' cy='0' r='1700'/%3E%3Ccircle fill='%237bf17a' cx='0' cy='0' r='1600'/%3E%3Ccircle fill='%2376ed74' cx='0' cy='0' r='1500'/%3E%3Ccircle fill='%2370e96e' cx='0' cy='0' r='1400'/%3E%3Ccircle fill='%236be468' cx='0' cy='0' r='1300'/%3E%3Ccircle fill='%2365e062' cx='0' cy='0' r='1200'/%3E%3Ccircle fill='%235fdc5c' cx='0' cy='0' r='1100'/%3E%3Ccircle fill='%2359d756' cx='0' cy='0' r='1000'/%3E%3Ccircle fill='%2353d350' cx='0' cy='0' r='900'/%3E%3Ccircle fill='%234dcf49' cx='0' cy='0' r='800'/%3E%3Ccircle fill='%2347ca43' cx='0' cy='0' r='700'/%3E%3Ccircle fill='%2340c63c' cx='0' cy='0' r='600'/%3E%3Ccircle fill='%2339c235' cx='0' cy='0' r='500'/%3E%3Ccircle fill='%2332be2e' cx='0' cy='0' r='400'/%3E%3Ccircle fill='%232ab926' cx='0' cy='0' r='300'/%3E%3Ccircle fill='%2320b51e' cx='0' cy='0' r='200'/%3E%3Ccircle fill='%2313b113' cx='0' cy='0' r='100'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.Questions::before {
+  content: "";
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(10px) brightness(0.7);
+}
+
+.Container {
+  /* position: relative; */
+  width: calc(100vw - 1rem);
+  min-height: 70vh;
+  max-width: 50rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  padding: 4rem;
+  gap: 3rem;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.Container button {
+  justify-self: end;
+}
+
+@media only screen and (max-width: 40em) {
+  .Container {
+    height: calc(100vh - 1rem);
+    align-content: center;
+    padding: 2rem;
+  }
+}
+
+/* .Questions button {
+  z-index: 99;
+  transform: translate(17rem, -6.5rem);
+}
+.Questions button:hover,
+.Questions button:focus {
+  transform: translate(17rem, -6.5rem);
+} */
+
+.Secondary {
+  background-color: #fcd285;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%23322102' stroke-width='7.2' stroke-opacity='0.2' %3E%3Ccircle fill='%23fcd285' cx='0' cy='0' r='1800'/%3E%3Ccircle fill='%23facf7f' cx='0' cy='0' r='1700'/%3E%3Ccircle fill='%23f9cb79' cx='0' cy='0' r='1600'/%3E%3Ccircle fill='%23f7c872' cx='0' cy='0' r='1500'/%3E%3Ccircle fill='%23f6c46c' cx='0' cy='0' r='1400'/%3E%3Ccircle fill='%23f4c166' cx='0' cy='0' r='1300'/%3E%3Ccircle fill='%23f3bd60' cx='0' cy='0' r='1200'/%3E%3Ccircle fill='%23f1ba59' cx='0' cy='0' r='1100'/%3E%3Ccircle fill='%23f0b653' cx='0' cy='0' r='1000'/%3E%3Ccircle fill='%23eeb34d' cx='0' cy='0' r='900'/%3E%3Ccircle fill='%23edaf46' cx='0' cy='0' r='800'/%3E%3Ccircle fill='%23ebac3f' cx='0' cy='0' r='700'/%3E%3Ccircle fill='%23eaa839' cx='0' cy='0' r='600'/%3E%3Ccircle fill='%23e8a431' cx='0' cy='0' r='500'/%3E%3Ccircle fill='%23e7a12a' cx='0' cy='0' r='400'/%3E%3Ccircle fill='%23e59d21' cx='0' cy='0' r='300'/%3E%3Ccircle fill='%23e49a17' cx='0' cy='0' r='200'/%3E%3Ccircle fill='%23e29609' cx='0' cy='0' r='100'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.Question {
+  line-height: 1.5;
+}
+
+.Timer {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  color: green;
+}
