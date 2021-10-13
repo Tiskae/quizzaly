@@ -8,7 +8,7 @@ import AppContext from "../../Contexts/AppContext";
 import * as helper from "../../Helpers";
 import Modal from "../../UI/Modal/Modal";
 import QuickInfo from "../../UI/QuickInfo/QuickInfo";
-import ShareLeaderboard from "../ShareLeaderboard/ShareLeaderboard";
+import ShareQuiz from "../ShareQuiz/ShareQuiz";
 
 const Leaderboard = (props) => {
   const [state, setState] = useState({
@@ -20,6 +20,7 @@ const Leaderboard = (props) => {
     errorExists: false,
     showShareComponent: false,
     shareSuccessMessage: "",
+    totalNumberOfQuiz: null,
   });
 
   const context = useContext(AppContext);
@@ -35,6 +36,9 @@ const Leaderboard = (props) => {
         const sortedResultsArr = Object.values(res.data).sort((prev, next) =>
           prev.percentage_correct < next.percentage_correct ? 1 : -1
         );
+
+        const totalNumberOfQuiz = sortedResultsArr.length;
+
         const slicedResultsArr = [...sortedResultsArr].slice(
           0,
           helper.MAX_LEADERBOARD_NUMBER
@@ -44,17 +48,20 @@ const Leaderboard = (props) => {
           (el) => el.percentage_correct
         );
 
-        let userPosition = pulledScores.length;
-        pulledScores.reverse().forEach((el, i, arr) => {
-          if (context.finalScore > el) {
-            userPosition = arr.length - i;
-          }
-        });
         const isUserOnLeaderboard = slicedResultsArr
           .map((el) => el.user_id)
           .includes(context.userId);
-        console.log(slicedResultsArr);
-        // console.log(scores);
+
+        let userPosition = null;
+        if (!isUserOnLeaderboard && context.username) {
+          const user_percentage =
+            (context.finalScore / context.noOfQuestions.value).toFixed(2) * 100;
+          const userPositionInFetchedList = sortedResultsArr.findIndex(
+            (el) => el.user_id === context.userId
+          );
+          userPosition =
+            userPositionInFetchedList !== -1 ? userPositionInFetchedList : "-";
+        }
 
         setState({
           ...state,
@@ -63,11 +70,11 @@ const Leaderboard = (props) => {
           scores: pulledScores,
           userPosition: userPosition,
           isUserOnLeaderboard: isUserOnLeaderboard,
+          totalNumberOfQuiz: totalNumberOfQuiz,
         });
       })
       .catch((err) => {
         setState({ ...state, errorExists: true });
-        console.error("Error", err);
       });
   };
 
@@ -166,7 +173,7 @@ const Leaderboard = (props) => {
             btnType="isSecondary"
             clicked={() => shareBtnHandler()}
           >
-            Share results
+            Share quiz
           </Button>
           <Button
             btnType="isPrimary"
@@ -181,7 +188,7 @@ const Leaderboard = (props) => {
 
   return (
     <div className={classes.Leaderboard}>
-      {context.username ? (
+      {context.username && state.loaded ? (
         <QuickInfo
           message={
             state.isUserOnLeaderboard
@@ -201,6 +208,11 @@ const Leaderboard = (props) => {
       ) : null}
       <div className={classes.Content}>
         <h3>Leaderboard</h3>
+        {state.totalNumberOfQuiz ? (
+          <p className={classes.Total}>
+            Total number of quiz played: {state.totalNumberOfQuiz}
+          </p>
+        ) : null}
         {content}
       </div>
       {state.errorExists ? (
@@ -212,9 +224,7 @@ const Leaderboard = (props) => {
           fallbackHandler={modalFallback}
         />
       ) : null}
-      {state.showShareComponent ? (
-        <ShareLeaderboard close={shareBtnHandler} />
-      ) : null}
+      {state.showShareComponent ? <ShareQuiz close={shareBtnHandler} /> : null}
     </div>
   );
 };

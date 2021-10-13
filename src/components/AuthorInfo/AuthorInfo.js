@@ -1,34 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
 import * as classes from "./AuthorInfo.module.css";
+import Button from "../../UI/Button/Button";
+import ShareLeaderboard from "../ShareQuiz/ShareQuiz";
+import QuickInfo from "../../UI/QuickInfo/QuickInfo";
 
 const AuthorInfo = (props) => {
-  // const shareBtnHandler = (appName) => {
-  //   if (appName) {
-  //     setState({
-  //       ...state,
-  //       showShareComponent: !state.showShareComponent,
-  //       shareSuccessMessage: appName,
-  //     });
-  //     setTimeout(
-  //       () =>
-  //         setState({
-  //           ...state,
-  //           showShareComponent: false,
-  //           shareSuccessMessage: "",
-  //         }),
-  //       4000
-  //     );
-  //   } else
-  //     setState({
-  //       ...state,
-  //       showShareComponent: !state.showShareComponent,
-  //       shareSuccessMessage: "",
-  //     });
-  // };
+  const [state, setState] = useState({
+    showInfo: false,
+    showShareComponent: false,
+    shareSuccessMessage: "",
+  });
+
+  const toggleShowInfo = () => {
+    setState({
+      ...state,
+      showInfo: !state.showInfo,
+    });
+  };
+
+  const shareBtnHandler = (appName) => {
+    if (appName) {
+      setState({
+        ...state,
+        showShareComponent: !state.showShareComponent,
+        shareSuccessMessage: appName,
+      });
+      setTimeout(
+        () =>
+          setState({
+            ...state,
+            showShareComponent: false,
+            shareSuccessMessage: "",
+          }),
+        4000
+      );
+    } else
+      setState({
+        ...state,
+        showShareComponent: !state.showShareComponent,
+        shareSuccessMessage: "",
+      });
+  };
+
+  const contentClasses = [classes.Content];
+  if (state.showInfo) contentClasses.push(classes.Visible);
 
   return (
     <div className={classes.AuthorInfo}>
-      <p>?</p>
+      {state.shareSuccessMessage ? (
+        <QuickInfo
+          message={
+            "Successfully shared to " +
+            state.shareSuccessMessage +
+            ". Thank you❤️"
+          }
+        />
+      ) : null}
+      <p className={classes.ToggleBtn} onClick={toggleShowInfo}>
+        {state.showInfo ? "X" : "i"}
+      </p>
+
+      <div className={contentClasses.join(" ")}>
+        <p>
+          Hey! I'm Tiskae, a frontend developer with expertise in react.js. This
+          app was built with ❤️ from Nigeria. &copy; 2021
+        </p>
+        <Button
+          btnType="isSecondary"
+          clicked={() => shareBtnHandler()}
+          disabled={state.shareSuccessMessage}
+        >
+          Share quiz
+        </Button>
+        <a href="https://tiskae.netlify.app" target="_blank">
+          <Button btnType="isPrimary">contact me</Button>
+        </a>
+      </div>
+      {state.showShareComponent ? (
+        <ShareLeaderboard close={shareBtnHandler} />
+      ) : null}
     </div>
   );
 };

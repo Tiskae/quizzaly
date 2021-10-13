@@ -13,7 +13,7 @@ import AppContext from "../../Contexts/AppContext";
 import { Redirect, withRouter } from "react-router-dom";
 import QuickInfo from "../../UI/QuickInfo/QuickInfo";
 import * as helper from "../../Helpers";
-// import Timer from "../../UI/Timer/Timer";
+import Timer from "../../UI/Timer/Timer";
 
 class Questions extends Component {
   state = {
@@ -28,7 +28,7 @@ class Questions extends Component {
     fetchErrorMessage: null,
     sendErrorExists: false,
     sendErrorMessage: null,
-
+    readyForSubmission: false,
     quizCompleted: false,
     sendingResult: false,
     score: 0,
@@ -36,17 +36,14 @@ class Questions extends Component {
 
   static contextType = AppContext;
 
-  handleWindowClose = (event) => {
-    alert("Are you okay?😒, Have you completed the quiz, ole oshi!!!!");
-    console.log(event);
+  handleWindowClose = (ev) => {
+    ev.preventDefault();
+    return (ev.returnValue = "All your quiz progress will be lost");
   };
 
   componentDidMount() {
     const URLToFetch = this.context.URLToFetch;
-
-    // const URLToFetch = this.props.URLToFetch;
-    // const URLToFetch =
-    //   "https://opentdb.com/api.php?amount=2&category=32&type=boolean";
+    // const URLToFetch = "https://opentdb.com/api.php?amount=5";
 
     axios
       .get(URLToFetch)
@@ -74,35 +71,45 @@ class Questions extends Component {
             fetchErrorMessage: "Something else went wrong...",
           });
         }
-        // console.log(res);
-        // console.log(res.data.response_code);
-
-        window.addEventListener("onbeforeunload", this.handleWindowClose);
       })
       .catch((err) => {
-        console.log(err);
         this.setState({
           questionsLoaded: false,
           fetchErrorExists: true,
           fetchErrorMessage: "Check your internet connection and try again!",
         });
       });
+
+    window.addEventListener("beforeunload", this.handleWindowClose);
   }
 
   componentWillUnmount = () => {
-    window.removeEventListener("onbeforeunload", this.handleWindowClose);
+    window.removeEventListener("beforeunload", this.handleWindowClose);
     this.pushDataToParentEl();
   };
 
-  _moveToNextQuestion = () => {
-    this.setState((prevState) => ({
-      isSecondary: !prevState.isSecondary,
-      currentNumber: prevState.currentNumber + 1,
-      score: prevState.isCurrentChosenOptionRight
-        ? prevState.score + 1
-        : prevState.score,
-      optionChosen: false,
-    }));
+  moveToNextQuestion = () => {
+    console.log("Outside sonto mi okoko");
+    this.setState((prevState) => {
+      console.log("Emi ni sonto mi okoko");
+      return {
+        isSecondary: !prevState.isSecondary,
+        currentNumber: prevState.currentNumber + 1,
+        score: prevState.isCurrentChosenOptionRight
+          ? prevState.score + 1
+          : prevState.score,
+        isCurrentChosenOptionRight: false,
+        optionChosen: false,
+      };
+    });
+    // this.setState({
+    //   isSecondary: !this.state.isSecondary,
+    //   currentNumber: this.state.currentNumber + 1,
+    //   score: this.state.isCurrentChosenOptionRight
+    //     ? this.state.score + 1
+    //     : this.state.score,
+    //   optionChosen: false,
+    // });
   };
 
   fetchErrorModalCTA = () => {
@@ -119,12 +126,9 @@ class Questions extends Component {
   };
 
   optionChosenHandler = (event) => {
-    // console.dir(event.target);
-    console.dir(event.target);
-    console.log(event.target.id, event.target.attributes.iscorrect.value);
-
     const isCorrect =
       event.target.attributes.iscorrect.value === "true" ? true : false;
+    console.log(isCorrect);
     this.setState({
       isCurrentChosenOptionRight: isCorrect,
       optionChosen: true,
@@ -132,8 +136,11 @@ class Questions extends Component {
   };
 
   pushDataToParentEl = () => {
+    const isLastOptionCorrect = this.state.isCurrentChosenOptionRight ? 1 : 0;
+    const finalScore = this.state.score + isLastOptionCorrect;
+
     this.props.pullData({
-      finalScore: this.state.score,
+      finalScore: finalScore,
     });
   };
 
@@ -148,14 +155,16 @@ class Questions extends Component {
         (score / this.context.noOfQuestions.value).toFixed(2) * 100,
     };
 
+    // const payload = { percentage_correct: score };
+
     axios
       .post(`${helper.DATABASE_URL}/results.json`, payload)
       .then((res) => {
-        console.log(res);
-        this.setState({ quizCompleted: true });
+        this.setState({ quizCompleted: true, readyForSubmission: true });
       })
       .catch((err) =>
         this.setState({
+          readyForSubmission: true,
           sendErrorExists: true,
           sendErrorMessage: "Problem sending results to cloud, please retry",
         })
@@ -166,14 +175,13 @@ class Questions extends Component {
     const isLastOptionCorrect = this.state.isCurrentChosenOptionRight ? 1 : 0;
     const finalScore = this.state.score + isLastOptionCorrect;
 
-    this.setState((prevState) => ({
-      score: prevState.score + isLastOptionCorrect,
-      optionChosen: false,
-      sendingResult: true,
-    }));
     this.sendResultToDatabase(finalScore);
 
-    // this.props.history.push("/results");
+    this.setState((prevState) => ({
+      optionChosen: false,
+      sendingResult: true,
+      isCurrentChosenOptionRight: false,
+    }));
   };
 
   render() {
@@ -188,7 +196,7 @@ class Questions extends Component {
     let nextQuestionBtn = (
       <Button
         btnType={this.state.isSecondary ? "isSecondary" : "isPrimary"}
-        clicked={this._moveToNextQuestion}
+        clicked={this.moveToNextQuestion}
         disabled={!this.state.optionChosen}
       >
         {"To Question " + (this.state.currentNumber + 1)}
@@ -202,7 +210,7 @@ class Questions extends Component {
           clicked={this.submitQuiz}
           disabled={!this.state.optionChosen}
         >
-          {this.state.sendingResult ? "Sending..." : "Submit"}
+          {this.state.sendingResult ? "Submitting..." : "Submit"}
         </Button>
       );
       nextQuestionBtn = null;
@@ -222,13 +230,16 @@ class Questions extends Component {
     let sendResultErrorModal = null;
     if (this.state.sendErrorExists) {
       sendResultErrorModal = (
-        <Modal
-          message={this.state.sendErrorMessage}
-          modalCTA={this.sendResultErrorModalCTA}
-          btnLabel="Retry"
-          fallbackLabel="Forfeit :("
-          fallbackHandler={this.sendResultfallbackHandler}
-        />
+        <>
+          <Modal
+            message={this.state.sendErrorMessage}
+            modalCTA={this.sendResultErrorModalCTA}
+            btnLabel="Retry"
+            fallbackLabel="Forfeit :("
+            fallbackHandler={this.sendResultfallbackHandler}
+          />
+          <QuickInfo message="You will lose all your quiz progress if you forfeit" />
+        </>
       );
     }
 
@@ -277,11 +288,25 @@ class Questions extends Component {
     return (
       <div className={questionClasses}>
         {this.state.questionsLoaded ? (
-          <QuickInfo message="Keep an eye on the timer, good luck!" />
+          <QuickInfo message="Keep an eye on the timer in the top right, good luck!" />
         ) : null}
         {fetchErrorModal}
         {sendResultErrorModal}
-        <div className={classes.Container}>{questionsField}</div>
+        <div className={classes.Container}>
+          {/* {this.state.questionsLoaded ? (
+            <Timer
+              currentQuestion={this.state.currentNumber}
+              readyForSubmission={this.state.readyForSubmission}
+              timeUp={
+                this.state.currentNumber ===
+                this.state.totalNoOfQuestionsRetrieved
+                  ? this.submitQuiz
+                  : this.moveToNextQuestion
+              }
+            />
+          ) : null} */}
+          {questionsField}
+        </div>
         {this.state.quizCompleted ? <Redirect from="/" to="/results" /> : null}
       </div>
     );

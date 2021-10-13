@@ -1,11 +1,11 @@
-.ShareLeaderboard {
+.ShareQuiz {
   height: 100vh;
   width: 100vw;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 99999;
-  backdrop-filter: blur(3px) brightness(0.3);
+  backdrop-filter: blur(5px) brightness(0.2);
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -26,11 +26,11 @@
   gap: 1rem;
 }
 
-.ShareLeaderboard > div:hover {
+.ShareQuiz > div:hover {
   /* transform: translateY(-3px); */
 }
 
 @media only screen and (max-width: 40em) {
-  .ShareLeaderboard {
+  .ShareQuiz {
   }
 }

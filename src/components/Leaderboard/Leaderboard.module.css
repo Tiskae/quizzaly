@@ -25,6 +25,7 @@
   width: 80vw;
   /* min-height: 80vh; */
   padding: 2rem 1rem;
+  position: relative;
 }
 
 @media only screen and (max-width: 40em) {
@@ -101,4 +102,21 @@
 
 .You {
   background-color: rgba(176, 233, 176, 0.9) !important;
+}
+
+.Total {
+  position: absolute;
+  text-align: right;
+  top: 3rem;
+  right: 5rem;
+  font-size: 1rem;
+  color: grey;
+}
+
+@media only screen and (max-width: 40em) {
+  .Total {
+    right: 2rem;
+    top: 3.5rem;
+    font-size: 0.8rem;
+  }
 }

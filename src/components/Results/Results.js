@@ -30,7 +30,7 @@ const Results = (props) => {
         <div className={classes.BtnContainer}>
           <Button
             btnType="isPrimary"
-            clicked={() => props.history.push("/leaderboard")}
+            clicked={() => props.history.push("/preferences")}
           >
             Play again
           </Button>

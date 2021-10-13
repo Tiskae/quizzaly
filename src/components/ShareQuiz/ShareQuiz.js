@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./ShareLeaderboard.module.css";
+import * as classes from "./ShareQuiz.module.css";
 import Button from "../../UI/Button/Button";
 
 import {
@@ -7,43 +7,31 @@ import {
   EmailIcon,
   FacebookShareButton,
   FacebookIcon,
-  HatenaShareButton,
   InstapaperShareButton,
   InstapaperIcon,
-  LineShareButton,
   LinkedinShareButton,
   LinkedinIcon,
-  LivejournalShareButton,
-  MailruShareButton,
-  OKShareButton,
-  PinterestShareButton,
-  PocketShareButton,
-  RedditShareButton,
   TelegramShareButton,
   TelegramIcon,
-  TumblrShareButton,
   TwitterShareButton,
   TwitterIcon,
-  ViberShareButton,
-  VKShareButton,
   WhatsappShareButton,
   WhatsappIcon,
-  WorkplaceShareButton,
 } from "react-share";
 
-const ShareLeaderboard = (props) => {
+const ShareQuiz = (props) => {
   const quote =
-    "Hey there, I just completed Tiz Quiz and I find it awesome, try it out as well!";
+    "Hey👋, I'm inviting you to try out Quizzaly, a quiz app only for the tough🏋️‍♂️🏋️‍♀️. I just participated and found it awesome. Try it out here ";
 
-  const hashtagsArr = ["game", "quiz", "reactjs"];
-  const hashtags = "#game #quiz #reactjs";
+  const hashtagsArr = ["game", "quizzaly", "reactjs"];
+  const hashtags = "#game #quizzaly #reactjs";
 
   //   const
 
   const url = "https://tiz-quiz.netlify.app/";
 
   return (
-    <div className={classes.ShareLeaderboard}>
+    <div className={classes.ShareQuiz}>
       <div className={classes.ShareBtns}>
         <FacebookShareButton
           quote={quote}
@@ -134,4 +122,4 @@ const ShareLeaderboard = (props) => {
   );
 };
 
-export default ShareLeaderboard;
+export default ShareQuiz;

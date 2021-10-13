@@ -1,14 +1,15 @@
 import React from "react";
 import * as classes from "./Instructions.module.css";
 import Button from "../../../../UI/Button/Button";
+import * as helper from "../../../../Helpers";
 
 const Instructions = (props) => {
   const instructions = [
-    "You have 30 seconds for each question",
+    `You have ${helper.TIME_FOR_A_QUESTION} seconds for each question`,
     "Once the timer runs out, you will be moved to the next question and will score zero point for that question",
     "Every correct answer gains you 1 point",
-    "Every incorrect answer ( ... 'Kokowa...🙃' ) gains you zero point",
-    "You cannot pause the game, so ensure you have time to the quiz",
+    "Every incorrect answer ( '... kokowa...' ) gains you zero point",
+    "You cannot pause the game, so ensure you have at least the estimated time stated below",
     "Do not reload the browser once you've started the quiz, all quiz progress will be lost",
   ];
 
@@ -35,6 +36,13 @@ const Instructions = (props) => {
             <li>Difficulty: {props.difficulty}</li>
             <li>Mode of options: {props.selectType}</li>
             <li>Number of questions: {props.noOfQuestions}</li>
+            <li>
+              Estimated quiz time:{" "}
+              {(
+                (props.noOfQuestions * helper.TIME_FOR_A_QUESTION) /
+                60
+              ).toFixed(1) + " minutes"}
+            </li>
           </ul>
         </div>
         <Button btnType="isSecondary" clicked={props.success}>

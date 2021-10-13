@@ -10,11 +10,11 @@ const Hero = (props) => {
   return (
     <div className={classes.Hero}>
       <div className={classes.HeroTextBox}>
-        <h1>Welcome to Tiz-Quiz</h1>
+        <h1>Welcome to Quizzaly</h1>
         <p>
-          Tiz Quiz is an automatic quiz based on JavaScript. It is fast,
-          efficient and gives you the best of quiz experience in a clean and
-          user-friendly environment
+          Quizzaly is a fully-flegded quiz app designed and coded with a great
+          user experience in mind, close attention to details, resplendent color choices and efficient
+          application logic. 
         </p>
         <Button btnType="isPrimary" clicked={callToAction}>
           Get started

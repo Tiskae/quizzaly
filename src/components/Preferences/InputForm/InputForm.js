@@ -75,22 +75,20 @@ class InputForm extends Component {
     axios
       .get("https://opentdb.com/api_category.php")
       .then((res) => {
-        this.setState((prevState) => {
-          return {
-            noOfQuestions: res.data.trivia_categories.length,
-            tracksAndTheirIDs: res.data.trivia_categories,
-            formData: {
-              ...prevState.formData,
-              tracks: {
-                options: this.setTracksFromFetchedData(
-                  res.data.trivia_categories
-                ),
-                defaultOption: prevState.formData.tracks.defaultOption,
-              },
+        this.setState((prevState) => ({
+          noOfQuestions: res.data.trivia_categories.length,
+          tracksAndTheirIDs: res.data.trivia_categories,
+          formData: {
+            ...prevState.formData,
+            tracks: {
+              options: this.setTracksFromFetchedData(
+                res.data.trivia_categories
+              ),
+              defaultOption: prevState.formData.tracks.defaultOption,
             },
-            userId: new Date().getTime(),
-          };
-        });
+          },
+          userId: new Date().getTime(),
+        }));
       })
       .catch((err) => {
         this.setState({
@@ -98,7 +96,6 @@ class InputForm extends Component {
           errorMessage:
             "Couldn't fetch needed information, make sure you have internet access and try again!",
         });
-        console.error(err.message);
       });
   };
 

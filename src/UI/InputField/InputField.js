@@ -13,6 +13,7 @@ const inputField = (props) => {
         className={classes.Input}
         onChange={props.changed}
         value={props.value}
+        maxLength="15"
       />
     </div>
   );

@@ -1,3 +1,26 @@
 .Timer {
-    font-size: 1rem;
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+}
+
+.Timer p {
+  font-size: 1rem;
+  color: black;
+  transition: all 0.2s;
+}
+
+.Timer .Red {
+  color: red;
+}
+
+@media only screen and (max-width: 40em) {
+  .Timer {
+    top: 5rem;
+    right: 2rem;
+  }
+
+  .Timer p {
+    font-size: 1.2rem;
+  }
 }

@@ -75,16 +75,20 @@ class App extends Component {
                 <Preferences pullData={this.setStateFromPreferences} />
               )}
             />
-            <Route
-              path="/questions"
-              render={() => (
-                <Questions
-                  pullData={this.setStateFromQuestions}
-                  URLToFetch={this.state.URLToFetch}
-                />
-              )}
-            />
-            <Route path="/results" component={Results} />
+            {this.state.username ? (
+              <Route
+                path="/questions"
+                render={() => (
+                  <Questions
+                    pullData={this.setStateFromQuestions}
+                    URLToFetch={this.state.URLToFetch}
+                  />
+                )}
+              />
+            ) : null}
+            {this.state.username ? (
+              <Route path="/results" component={Results} />
+            ) : null}
             <Route path="/leaderboard" component={Leaderboard} />
             <Redirect from="/" to="/" />
           </Switch>
