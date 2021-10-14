@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
 import * as classes from "./AuthorInfo.module.css";
 import Button from "../../UI/Button/Button";
 import ShareLeaderboard from "../ShareQuiz/ShareQuiz";
@@ -10,6 +11,8 @@ const AuthorInfo = (props) => {
     showShareComponent: false,
     shareSuccessMessage: "",
   });
+
+  const navigateToLeaderboard = () => props.history.push("/leaderboard");
 
   const toggleShowInfo = () => {
     setState({
@@ -66,13 +69,21 @@ const AuthorInfo = (props) => {
           app was built with ❤️ from Nigeria. &copy; 2021
         </p>
         <Button
+          btnType="inline"
+          clicked={() => navigateToLeaderboard()}
+          disabled={state.shareSuccessMessage}
+        >
+          View Leaderboard
+        </Button>
+        <Button
           btnType="isSecondary"
           clicked={() => shareBtnHandler()}
           disabled={state.shareSuccessMessage}
         >
           Share quiz
         </Button>
-        <a href="https://tiskae.netlify.app" target="_blank">
+
+        <a href="https://tiskae.netlify.app" target="_blank" rel="noreferrer">
           <Button btnType="isPrimary">contact me</Button>
         </a>
       </div>
@@ -83,4 +94,4 @@ const AuthorInfo = (props) => {
   );
 };
 
-export default AuthorInfo;
+export default withRouter(AuthorInfo);

@@ -18,6 +18,7 @@ const Leaderboard = (props) => {
     userPosition: null,
     isUserOnLeaderboard: false,
     errorExists: false,
+    fetchLeaderboardErrorMsg: null,
     showShareComponent: false,
     shareSuccessMessage: "",
     totalNumberOfQuiz: null,
@@ -33,6 +34,11 @@ const Leaderboard = (props) => {
     axios
       .get(`${helper.DATABASE_URL}/results.json`)
       .then((res) => {
+        if (!res.data)
+          throw new Error(
+            "No one is on the leaderboard yet. A good time to pick your spot and be number 1!"
+          );
+
         const sortedResultsArr = Object.values(res.data).sort((prev, next) =>
           prev.percentage_correct < next.percentage_correct ? 1 : -1
         );
@@ -74,7 +80,12 @@ const Leaderboard = (props) => {
         });
       })
       .catch((err) => {
-        setState({ ...state, errorExists: true });
+        console.log(err);
+        setState({
+          ...state,
+          errorExists: true,
+          fetchLeaderboardErrorMsg: err.message,
+        });
       });
   };
 
@@ -217,7 +228,7 @@ const Leaderboard = (props) => {
       </div>
       {state.errorExists ? (
         <Modal
-          message="Couldn't fetch leaderboard data"
+          message={state.fetchLeaderboardErrorMsg}
           btnLabel="Retry"
           modalCTA={modalCTA}
           fallbackLabel="Cancel"

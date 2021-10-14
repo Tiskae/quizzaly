@@ -124,7 +124,7 @@ class InputForm extends Component {
       activeSelectType: { ...this.context.selectType },
       activeNumberofQuestions: { value: this.context.noOfQuestions.value },
       tracksAndTheirIDs: [...this.context.tracksAndTheirIDs],
-      userId: this.context.userId,
+      userId: new Date().getTime(),
     };
 
     this.setState((prevState) => {

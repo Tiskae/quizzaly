@@ -89,9 +89,7 @@ class Questions extends Component {
   };
 
   moveToNextQuestion = () => {
-    console.log("Outside sonto mi okoko");
     this.setState((prevState) => {
-      console.log("Emi ni sonto mi okoko");
       return {
         isSecondary: !prevState.isSecondary,
         currentNumber: prevState.currentNumber + 1,
@@ -102,14 +100,6 @@ class Questions extends Component {
         optionChosen: false,
       };
     });
-    // this.setState({
-    //   isSecondary: !this.state.isSecondary,
-    //   currentNumber: this.state.currentNumber + 1,
-    //   score: this.state.isCurrentChosenOptionRight
-    //     ? this.state.score + 1
-    //     : this.state.score,
-    //   optionChosen: false,
-    // });
   };
 
   fetchErrorModalCTA = () => {
@@ -128,7 +118,6 @@ class Questions extends Component {
   optionChosenHandler = (event) => {
     const isCorrect =
       event.target.attributes.iscorrect.value === "true" ? true : false;
-    console.log(isCorrect);
     this.setState({
       isCurrentChosenOptionRight: isCorrect,
       optionChosen: true,
@@ -155,7 +144,6 @@ class Questions extends Component {
         (score / this.context.noOfQuestions.value).toFixed(2) * 100,
     };
 
-    // const payload = { percentage_correct: score };
 
     axios
       .post(`${helper.DATABASE_URL}/results.json`, payload)
@@ -174,13 +162,13 @@ class Questions extends Component {
   submitQuiz = () => {
     const isLastOptionCorrect = this.state.isCurrentChosenOptionRight ? 1 : 0;
     const finalScore = this.state.score + isLastOptionCorrect;
+    console.group(finalScore);
 
     this.sendResultToDatabase(finalScore);
 
     this.setState((prevState) => ({
       optionChosen: false,
       sendingResult: true,
-      isCurrentChosenOptionRight: false,
     }));
   };
 
@@ -235,7 +223,7 @@ class Questions extends Component {
             message={this.state.sendErrorMessage}
             modalCTA={this.sendResultErrorModalCTA}
             btnLabel="Retry"
-            fallbackLabel="Forfeit :("
+            fallbackLabel="Forfeit : ("
             fallbackHandler={this.sendResultfallbackHandler}
           />
           <QuickInfo message="You will lose all your quiz progress if you forfeit" />
@@ -293,9 +281,12 @@ class Questions extends Component {
         {fetchErrorModal}
         {sendResultErrorModal}
         <div className={classes.Container}>
-          {/* {this.state.questionsLoaded ? (
+          {this.state.questionsLoaded ? (
             <Timer
               currentQuestion={this.state.currentNumber}
+              totalNoOfQuestionsRetrieved={
+                this.state.totalNoOfQuestionsRetrieved
+              }
               readyForSubmission={this.state.readyForSubmission}
               timeUp={
                 this.state.currentNumber ===
@@ -304,7 +295,7 @@ class Questions extends Component {
                   : this.moveToNextQuestion
               }
             />
-          ) : null} */}
+          ) : null}
           {questionsField}
         </div>
         {this.state.quizCompleted ? <Redirect from="/" to="/results" /> : null}

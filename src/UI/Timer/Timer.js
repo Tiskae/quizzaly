@@ -1,50 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as classes from "./Timer.module.css";
 import * as helper from "../../Helpers";
+import Countdown, { zeroPad } from "react-countdown";
 
 const Timer = (props) => {
-  const [time, setTime] = useState(15);
-  let timeInterval;
+  const [key, setKey] = useState(new Date());
 
-  //   😭😭😭😭😭😭😭😭😭😭😭
-  //   😭😭😭😭😭😭😭😭😭😭😭
-  //   😭😭😭😭😭😭😭😭😭😭😭
-
-  useEffect(() => {
-    setTime(5);
-    clearInterval(timeInterval);
-
-    timeInterval = setInterval(() => {
-      setTime((time) => {
-        //   if (time === 0) props.timeUp();
-        if (time > 0) {
-          return time - 1;
-        } else if (time === 0) {
-          console.log("Moved!!!");
-          props.timeUp();
-          return 5;
-        }
-      });
-
-      if (props.readyForSubmission) clearInterval(timeInterval);
-      return () => {
-        clearInterval(timeInterval);
-      };
-      //   console.log(time);
-    }, 1000);
-
-    return () => clearInterval(timeInterval);
-  }, []);
+  //   Spent a lot of time before I could fix this component
+  //   If you're reading this, welcome to the code that works
 
   return (
     <div className={classes.Timer}>
-      <p className={time <= 10 ? classes.Red : null}>
-        {time > 0
-          ? `${Math.floor(time / 60)}:${`${time % 60}`.padStart(2, 0)}`
-          : "Time's up!"}
-      </p>
+      {!props.readyForSubmission ? (
+        <Countdown
+          date={Date.now() + helper.TIME_FOR_A_QUESTION * 1000}
+          onTick={() => {}}
+          onComplete={(timeDelta) => {
+            if (props.currentQuestion < props.totalNoOfQuestionsRetrieved) {
+              setKey(new Date());
+            }
+            !props.readyForSubmission && props.timeUp();
+          }}
+          key={key}
+          renderer={({ _, minutes, seconds }) => (
+            <p className={seconds <= 10 ? classes.Red : null}>
+              {seconds > 0
+                ? `${zeroPad(minutes)}:${zeroPad(seconds)}`
+                : "Time's up!"}
+            </p>
+          )}
+        />
+      ) : null}
+      ;
     </div>
   );
 };
 
-export default Timer;
+export default React.memo(Timer);

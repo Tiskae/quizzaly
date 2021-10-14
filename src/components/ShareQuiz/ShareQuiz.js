@@ -28,7 +28,7 @@ const ShareQuiz = (props) => {
 
   //   const
 
-  const url = "https://tiz-quiz.netlify.app/";
+  const url = "https://quizzaly.netlify.app/";
 
   return (
     <div className={classes.ShareQuiz}>
@@ -59,7 +59,7 @@ const ShareQuiz = (props) => {
           title={quote}
           //   via={quote}
           hashtags={hashtagsArr}
-          related={["@tiskae1"]}
+          related={["tiskae1"]}
           url={url}
           onShareWindowClose={() => {
             props.close("Twitter");
