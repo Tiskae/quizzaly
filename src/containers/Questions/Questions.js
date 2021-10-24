@@ -148,10 +148,11 @@ class Questions extends Component {
     axios
       .post(`${helper.DATABASE_URL}/results.json`, payload)
       .then((res) => {
-        this.setState({ quizCompleted: true, readyForSubmission: true });
+        this.setState({ quizCompleted: true, readyForSubmission: true , sendingResult: false});
       })
       .catch((err) =>
         this.setState({
+          sendingResult: false,
           readyForSubmission: true,
           sendErrorExists: true,
           sendErrorMessage: "Problem sending results to cloud, please retry",
@@ -160,16 +161,19 @@ class Questions extends Component {
   };
 
   submitQuiz = () => {
+    if (this.state.sendingResult) return // ALready sending, wait till done
+
     const isLastOptionCorrect = this.state.isCurrentChosenOptionRight ? 1 : 0;
     const finalScore = this.state.score + isLastOptionCorrect;
-    console.group(finalScore);
-
-    this.sendResultToDatabase(finalScore);
 
     this.setState((prevState) => ({
       optionChosen: false,
       sendingResult: true,
     }));
+
+    this.sendResultToDatabase(finalScore);
+
+  
   };
 
   render() {

@@ -31,7 +31,6 @@ const Timer = (props) => {
           )}
         />
       ) : null}
-      ;
     </div>
   );
 };

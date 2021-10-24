@@ -4,13 +4,13 @@ import * as classes from "./InputForm.module.css";
 import Button from "../../../UI/Button/Button";
 import InputField from "../../../UI/InputField/InputField";
 import SelectField from "../../../UI/SelectField/SelectField";
-// import ErrorMessage from "../../../UI/ErrorMessage/ErrorMessage";
 import Loader from "../../../UI/Loader/Loader";
 import axios from "axios";
 import * as helpers from "../../../Helpers";
 import Modal from "../../../UI/Modal/Modal";
 import AppContext from "../../../Contexts/AppContext";
 import Instructions from "./Instructions/Instructions";
+
 
 class InputForm extends Component {
   state = {
@@ -35,13 +35,16 @@ class InputForm extends Component {
         ],
         defaultOption: "Choose",
       },
+      
+      
       selectType: {
         options: [
           { displayName: "Any", value: "any" },
           { displayName: "Multiple Choice", value: "multiple" },
           { displayName: "True / False", value: "boolean" },
         ],
-        defaultOption: "Choose",
+        defaultOptiom: {displayName: "Choose", value:"choose"}
+
       },
       numberOfQuestion: {
         options: [10, 15, 20],
@@ -295,7 +298,6 @@ class InputForm extends Component {
     const tracksFieldsArr = (
       <SelectField
         options={this.state.formData.tracks.options}
-        // defaultOpt={this.state.formData.tracks.defaultOption}
         changed={this.trackChangedHandler}
         defaultOpt={
           this.state.activeTrack.value &&
@@ -330,7 +332,7 @@ class InputForm extends Component {
           this.state.activeSelectType.displayName &&
           this.state.userInfoSubmitted
             ? this.state.activeSelectType.displayName
-            : this.state.formData.selectType.defaultOption
+            : this.state.formData.selectType.defaultOptiom.displayName
         }
         changed={this.selectTypeChangedHandler}
       />
@@ -345,6 +347,7 @@ class InputForm extends Component {
             ? this.state.activeNumberofQuestions.value
             : this.state.formData.numberOfQuestion.defaultOption
         }
+        // defaultOpt="Sonto mi okoko"
         changed={this.numberOfQuestionChangedHandler}
       />
     );
