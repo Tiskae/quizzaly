@@ -26,8 +26,6 @@ const ShareQuiz = (props) => {
   const hashtagsArr = ["game", "quizzaly", "reactjs"];
   const hashtags = "#game #quizzaly #reactjs";
 
-  //   const
-
   const url = "https://quizzaly.netlify.app/";
 
   return (
