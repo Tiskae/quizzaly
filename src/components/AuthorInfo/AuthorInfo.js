@@ -65,8 +65,8 @@ const AuthorInfo = (props) => {
 
       <div className={contentClasses.join(" ")}>
         <p>
-          Hey! I'm Tiskae, a frontend developer with expertise in react.js. This
-          app was built with ❤️ from Nigeria. &copy; 2021
+          Hey! I'm Tiskae, a software developer. This app was built with ❤️ from
+          Nigeria. &copy; 2024
         </p>
         <Button
           btnType="inline"
@@ -83,7 +83,7 @@ const AuthorInfo = (props) => {
           Share quiz
         </Button>
 
-        <a href="https://tiskae.netlify.app" target="_blank" rel="noreferrer">
+        <a href="https://tiskae.codes" target="_blank" rel="noreferrer">
           <Button btnType="isPrimary">contact me</Button>
         </a>
       </div>
