@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./ShareQuiz.module.css";
+import classes from "./ShareQuiz.module.css";
 import Button from "../../UI/Button/Button";
 
 import {
@@ -106,13 +106,7 @@ const ShareQuiz = (props) => {
             props.close("Email");
           }}
         >
-          <EmailIcon
-            size="50"
-            round={false}
-            borderRadius="50"
-            bgStyle={{ fill: "white" }}
-            iconFillColor="black"
-          />
+          <EmailIcon size="50" round={false} borderRadius="50" bgStyle={{ fill: "white" }} iconFillColor="black" />
         </EmailShareButton>
       </div>
       <Button clicked={() => props.close()}>Close</Button>

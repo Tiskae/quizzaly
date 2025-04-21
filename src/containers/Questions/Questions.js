@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as classes from "./Questions.module.css";
+import classes from "./Questions.module.css";
 
 import Button from "../../UI/Button/Button";
 import Question from "../../components/Question/Question";
@@ -10,7 +10,7 @@ import Loader from "../../UI/Loader/Loader";
 import Modal from "../../UI/Modal/Modal";
 import Aux from "../../hoc/Auxilliary";
 import AppContext from "../../Contexts/AppContext";
-import { Redirect, withRouter } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import QuickInfo from "../../UI/QuickInfo/QuickInfo";
 import * as helper from "../../Helpers";
 import Timer from "../../UI/Timer/Timer";
@@ -40,6 +40,8 @@ class Questions extends Component {
     ev.preventDefault();
     return (ev.returnValue = "All your quiz progress will be lost");
   };
+
+  navigate = () => {};
 
   componentDidMount() {
     const URLToFetch = this.context.URLToFetch;
@@ -93,9 +95,7 @@ class Questions extends Component {
       return {
         isSecondary: !prevState.isSecondary,
         currentNumber: prevState.currentNumber + 1,
-        score: prevState.isCurrentChosenOptionRight
-          ? prevState.score + 1
-          : prevState.score,
+        score: prevState.isCurrentChosenOptionRight ? prevState.score + 1 : prevState.score,
         isCurrentChosenOptionRight: false,
         optionChosen: false,
       };
@@ -103,7 +103,7 @@ class Questions extends Component {
   };
 
   fetchErrorModalCTA = () => {
-    this.props.history.push("/preferences");
+    this.props.navigate("/preferences");
   };
 
   sendResultErrorModalCTA = () => {
@@ -112,12 +112,11 @@ class Questions extends Component {
   };
 
   sendResultfallbackHandler = () => {
-    this.props.history.push("/preferences");
+    this.props.navigate("/preferences");
   };
 
   optionChosenHandler = (event) => {
-    const isCorrect =
-      event.target.attributes.iscorrect.value === "true" ? true : false;
+    const isCorrect = event.target.attributes.iscorrect.value === "true" ? true : false;
     this.setState({
       isCurrentChosenOptionRight: isCorrect,
       optionChosen: true,
@@ -140,15 +139,13 @@ class Questions extends Component {
       quiz_track: this.context.quizTrack,
       difficulty: this.context.difficulty.displayName,
       select_type: this.context.selectType.displayName,
-      percentage_correct:
-        (score / this.context.noOfQuestions.value).toFixed(2) * 100,
+      percentage_correct: (score / this.context.noOfQuestions.value).toFixed(2) * 100,
     };
-
 
     axios
       .post(`${helper.DATABASE_URL}/results.json`, payload)
       .then((res) => {
-        this.setState({ quizCompleted: true, readyForSubmission: true , sendingResult: false});
+        this.setState({ quizCompleted: true, readyForSubmission: true, sendingResult: false });
       })
       .catch((err) =>
         this.setState({
@@ -161,7 +158,7 @@ class Questions extends Component {
   };
 
   submitQuiz = () => {
-    if (this.state.sendingResult) return // ALready sending, wait till done
+    if (this.state.sendingResult) return; // ALready sending, wait till done
 
     const isLastOptionCorrect = this.state.isCurrentChosenOptionRight ? 1 : 0;
     const finalScore = this.state.score + isLastOptionCorrect;
@@ -172,8 +169,6 @@ class Questions extends Component {
     }));
 
     this.sendResultToDatabase(finalScore);
-
-  
   };
 
   render() {
@@ -211,11 +206,7 @@ class Questions extends Component {
     let fetchErrorModal = null;
     if (this.state.fetchErrorExists) {
       fetchErrorModal = (
-        <Modal
-          message={this.state.fetchErrorMessage}
-          modalCTA={this.fetchErrorModalCTA}
-          btnLabel="Cancel"
-        />
+        <Modal message={this.state.fetchErrorMessage} modalCTA={this.fetchErrorModalCTA} btnLabel="Cancel" />
       );
     }
 
@@ -242,18 +233,14 @@ class Questions extends Component {
         <Aux>
           <div className={classes.Question}>
             <Question
-              question={parseStringToHTML(
-                this.state.questions[this.state.currentNumber - 1].question
-              )}
+              question={parseStringToHTML(this.state.questions[this.state.currentNumber - 1].question)}
               //
               // The last option is always the correct one before sorting
 
               options={[
                 [
-                  ...this.state.questions[this.state.currentNumber - 1]
-                    .incorrect_answers,
-                  this.state.questions[this.state.currentNumber - 1]
-                    .correct_answer,
+                  ...this.state.questions[this.state.currentNumber - 1].incorrect_answers,
+                  this.state.questions[this.state.currentNumber - 1].correct_answer,
                 ]
                   .map((el, _, arr) => {
                     if (el === arr[arr.length - 1]) {
@@ -288,13 +275,10 @@ class Questions extends Component {
           {this.state.questionsLoaded ? (
             <Timer
               currentQuestion={this.state.currentNumber}
-              totalNoOfQuestionsRetrieved={
-                this.state.totalNoOfQuestionsRetrieved
-              }
+              totalNoOfQuestionsRetrieved={this.state.totalNoOfQuestionsRetrieved}
               readyForSubmission={this.state.readyForSubmission}
               timeUp={
-                this.state.currentNumber ===
-                this.state.totalNoOfQuestionsRetrieved
+                this.state.currentNumber === this.state.totalNoOfQuestionsRetrieved
                   ? this.submitQuiz
                   : this.moveToNextQuestion
               }
@@ -302,10 +286,17 @@ class Questions extends Component {
           ) : null}
           {questionsField}
         </div>
-        {this.state.quizCompleted ? <Redirect from="/" to="/results" /> : null}
+        {this.state.quizCompleted ? <Navigate to="/results" /> : null}
       </div>
     );
   }
 }
 
-export default withRouter(Questions);
+// Create a wrapper component that injects router props
+function WithRouterWrapper(props) {
+  const navigate = useNavigate();
+
+  return <Questions {...props} navigate={navigate} />;
+}
+
+export default WithRouterWrapper;

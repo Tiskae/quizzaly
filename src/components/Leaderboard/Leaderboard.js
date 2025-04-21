@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { withRouter } from "react-router-dom";
 import axios from "axios";
-import * as classes from "./Leaderboard.module.css";
+import classes from "./Leaderboard.module.css";
 import Loader from "../../UI/Loader/Loader";
 import Button from "../../UI/Button/Button";
 import AppContext from "../../Contexts/AppContext";
@@ -9,8 +8,9 @@ import * as helper from "../../Helpers";
 import Modal from "../../UI/Modal/Modal";
 import QuickInfo from "../../UI/QuickInfo/QuickInfo";
 import ShareQuiz from "../ShareQuiz/ShareQuiz";
+import { useNavigate } from "react-router-dom";
 
-const Leaderboard = (props) => {
+const Leaderboard = () => {
   const [state, setState] = useState({
     results: null,
     loaded: false,
@@ -24,6 +24,8 @@ const Leaderboard = (props) => {
     totalNumberOfQuiz: null,
   });
 
+  const navigate = useNavigate();
+
   const context = useContext(AppContext);
 
   useEffect(() => {
@@ -35,9 +37,7 @@ const Leaderboard = (props) => {
       .get(`${helper.DATABASE_URL}/results.json`)
       .then((res) => {
         if (!res.data)
-          throw new Error(
-            "No one is on the leaderboard yet. A good time to pick your spot and be number 1!"
-          );
+          throw new Error("No one is on the leaderboard yet. A good time to pick your spot and be number 1!");
 
         const sortedResultsArr = Object.values(res.data).sort((prev, next) =>
           prev.percentage_correct < next.percentage_correct ? 1 : -1
@@ -45,28 +45,17 @@ const Leaderboard = (props) => {
 
         const totalNumberOfQuiz = sortedResultsArr.length;
 
-        const slicedResultsArr = [...sortedResultsArr].slice(
-          0,
-          helper.MAX_LEADERBOARD_NUMBER
-        );
+        const slicedResultsArr = [...sortedResultsArr].slice(0, helper.MAX_LEADERBOARD_NUMBER);
 
-        const pulledScores = sortedResultsArr.map(
-          (el) => el.percentage_correct
-        );
+        const pulledScores = sortedResultsArr.map((el) => el.percentage_correct);
 
-        const isUserOnLeaderboard = slicedResultsArr
-          .map((el) => el.user_id)
-          .includes(context.userId);
+        const isUserOnLeaderboard = slicedResultsArr.map((el) => el.user_id).includes(context.userId);
 
         let userPosition = null;
         if (!isUserOnLeaderboard && context.username) {
-          const user_percentage =
-            (context.finalScore / context.noOfQuestions.value).toFixed(2) * 100;
-          const userPositionInFetchedList = sortedResultsArr.findIndex(
-            (el) => el.user_id === context.userId
-          );
-          userPosition =
-            userPositionInFetchedList !== -1 ? userPositionInFetchedList : "-";
+          const user_percentage = (context.finalScore / context.noOfQuestions.value).toFixed(2) * 100;
+          const userPositionInFetchedList = sortedResultsArr.findIndex((el) => el.user_id === context.userId);
+          userPosition = userPositionInFetchedList !== -1 ? userPositionInFetchedList : "-";
         }
 
         setState({
@@ -94,7 +83,7 @@ const Leaderboard = (props) => {
     fetchLeaderboardFromCloud();
   };
 
-  const modalFallback = () => props.history.push("/preferences");
+  const modalFallback = () => navigate("/preferences");
 
   const shareBtnHandler = (appName) => {
     if (appName) {
@@ -149,9 +138,7 @@ const Leaderboard = (props) => {
                   <td>{i + 1}</td>
                   <td>{userName}</td>
                   <td>{el.quiz_track}</td>
-                  <td>
-                    {el.difficulty[0].toUpperCase() + el.difficulty.slice(1)}
-                  </td>
+                  <td>{el.difficulty[0].toUpperCase() + el.difficulty.slice(1)}</td>
                   <td>{el.percentage_correct}%</td>
                 </tr>
               );
@@ -164,32 +151,19 @@ const Leaderboard = (props) => {
                 <td>{context.quizTrack}</td>
                 <td>
                   {context.difficulty.displayName
-                    ? context.difficulty.displayName[0].toUpperCase() +
-                      context.difficulty.displayName.slice(1)
+                    ? context.difficulty.displayName[0].toUpperCase() + context.difficulty.displayName.slice(1)
                     : ""}
                 </td>
-                <td>
-                  {(context.finalScore / context.noOfQuestions.value).toFixed(
-                    2
-                  ) * 100}
-                  %
-                </td>
+                <td>{(context.finalScore / context.noOfQuestions.value).toFixed(2) * 100}%</td>
               </tr>
             ) : null}
           </tbody>
         </table>
         <div className={classes.BtnContainer}>
-          <Button
-            disabled={state.shareSuccessMessage}
-            btnType="isSecondary"
-            clicked={() => shareBtnHandler()}
-          >
+          <Button disabled={state.shareSuccessMessage} btnType="isSecondary" clicked={() => shareBtnHandler()}>
             Share quiz
           </Button>
-          <Button
-            btnType="isPrimary"
-            clicked={() => props.history.push("/preferences")}
-          >
+          <Button btnType="isPrimary" clicked={() => navigate("/preferences")}>
             Play {context.username ? "again!" : "now!"}
           </Button>
         </div>
@@ -209,20 +183,12 @@ const Leaderboard = (props) => {
         />
       ) : null}
       {state.shareSuccessMessage ? (
-        <QuickInfo
-          message={
-            "Successfully shared to " +
-            state.shareSuccessMessage +
-            ". Thank you❤️"
-          }
-        />
+        <QuickInfo message={"Successfully shared to " + state.shareSuccessMessage + ". Thank you❤️"} />
       ) : null}
       <div className={classes.Content}>
         <h3>Leaderboard</h3>
         {state.totalNumberOfQuiz ? (
-          <p className={classes.Total}>
-            Total number of quiz played: {state.totalNumberOfQuiz}
-          </p>
+          <p className={classes.Total}>Total number of quiz played: {state.totalNumberOfQuiz}</p>
         ) : null}
         {content}
       </div>
@@ -240,4 +206,4 @@ const Leaderboard = (props) => {
   );
 };
 
-export default withRouter(Leaderboard);
+export default Leaderboard;

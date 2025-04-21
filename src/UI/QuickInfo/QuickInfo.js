@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./QuickInfo.module.css";
+import classes from "./QuickInfo.module.css";
 
 const QuickInfo = (props) => {
   return (

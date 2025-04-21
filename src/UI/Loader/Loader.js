@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./Loader.module.css";
+import classes from "./Loader.module.css";
 
 const Loader = (props) => {
   let styleClasses = [classes.Loader];

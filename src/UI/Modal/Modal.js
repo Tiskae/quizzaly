@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./Modal.module.css";
+import classes from "./Modal.module.css";
 import Button from "../Button/Button";
 
 const Modal = (props) => {

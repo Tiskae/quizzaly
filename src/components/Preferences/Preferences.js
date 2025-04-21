@@ -1,7 +1,7 @@
 import React from "react";
 import InputForm from "./InputForm/InputForm";
 
-import * as classes from "./Preferences.module.css";
+import classes from "./Preferences.module.css";
 
 const Preferences = (props) => {
   return (

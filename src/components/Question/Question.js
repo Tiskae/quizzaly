@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./Question.module.css";
+import classes from "./Question.module.css";
 
 import RadioField from "../../UI/RadioField/RadioField";
 

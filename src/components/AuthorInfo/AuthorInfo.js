@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import * as classes from "./AuthorInfo.module.css";
+import { useNavigate } from "react-router-dom";
+import classes from "./AuthorInfo.module.css";
 import Button from "../../UI/Button/Button";
 import ShareLeaderboard from "../ShareQuiz/ShareQuiz";
 import QuickInfo from "../../UI/QuickInfo/QuickInfo";
 
-const AuthorInfo = (props) => {
+const AuthorInfo = () => {
   const [state, setState] = useState({
     showInfo: false,
     showShareComponent: false,
     shareSuccessMessage: "",
   });
 
-  const navigateToLeaderboard = () => props.history.push("/leaderboard");
+  const navigate = useNavigate();
+
+  const navigateToLeaderboard = () => navigate("/leaderboard");
 
   const toggleShowInfo = () => {
     setState({
@@ -51,47 +53,28 @@ const AuthorInfo = (props) => {
   return (
     <div className={classes.AuthorInfo}>
       {state.shareSuccessMessage ? (
-        <QuickInfo
-          message={
-            "Successfully shared to " +
-            state.shareSuccessMessage +
-            ". Thank you❤️"
-          }
-        />
+        <QuickInfo message={"Successfully shared to " + state.shareSuccessMessage + ". Thank you❤️"} />
       ) : null}
       <p className={classes.ToggleBtn} onClick={toggleShowInfo}>
         {state.showInfo ? "X" : "i"}
       </p>
 
       <div className={contentClasses.join(" ")}>
-        <p>
-          Hey! I'm Tiskae, a software developer. This app was built with ❤️ from
-          Nigeria. &copy; 2024
-        </p>
-        <Button
-          btnType="inline"
-          clicked={() => navigateToLeaderboard()}
-          disabled={state.shareSuccessMessage}
-        >
+        <p>Hey! I'm Ibrahim, a software developer. This app was built with ❤️ from Nigeria. &copy; 2025</p>
+        <Button btnType="inline" clicked={() => navigateToLeaderboard()} disabled={state.shareSuccessMessage}>
           View Leaderboard
         </Button>
-        <Button
-          btnType="isSecondary"
-          clicked={() => shareBtnHandler()}
-          disabled={state.shareSuccessMessage}
-        >
+        <Button btnType="isSecondary" clicked={() => shareBtnHandler()} disabled={state.shareSuccessMessage}>
           Share quiz
         </Button>
 
-        <a href="https://tiskae.codes" target="_blank" rel="noreferrer">
+        <a href="https://tiskae.netlify.app" target="_blank" rel="noreferrer">
           <Button btnType="isPrimary">contact me</Button>
         </a>
       </div>
-      {state.showShareComponent ? (
-        <ShareLeaderboard close={shareBtnHandler} />
-      ) : null}
+      {state.showShareComponent ? <ShareLeaderboard close={shareBtnHandler} /> : null}
     </div>
   );
 };
 
-export default withRouter(AuthorInfo);
+export default AuthorInfo;

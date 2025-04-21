@@ -1,6 +1,6 @@
 // Library componens imports
 import React, { Component } from "react";
-import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 // Component imports
 import IntroPage from "./components/IntroPage/IntroPage";
@@ -66,32 +66,20 @@ class App extends Component {
             userId: this.state.userId,
           }}
         >
-          <Switch>
-            <Route exact path="/" component={Hero} />
-            <Route path="/intro" component={IntroPage} />
-            <Route
-              path="/preferences"
-              render={() => (
-                <Preferences pullData={this.setStateFromPreferences} />
-              )}
-            />
+          <Routes>
+            <Route path="/" element={<Hero />} />
+            <Route path="/intro" element={<IntroPage />} />
+            <Route path="/preferences" element={<Preferences pullData={this.setStateFromPreferences} />} />
             {this.state.username ? (
               <Route
                 path="/questions"
-                render={() => (
-                  <Questions
-                    pullData={this.setStateFromQuestions}
-                    URLToFetch={this.state.URLToFetch}
-                  />
-                )}
+                element={<Questions pullData={this.setStateFromQuestions} URLToFetch={this.state.URLToFetch} />}
               />
             ) : null}
-            {this.state.username ? (
-              <Route path="/results" component={Results} />
-            ) : null}
-            <Route path="/leaderboard" component={Leaderboard} />
-            <Redirect from="/" to="/" />
-          </Switch>
+            {this.state.username ? <Route path="/results" element={<Results />} /> : null}
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
           <AuthorInfo />
         </AppContext.Provider>
       </div>
@@ -99,4 +87,11 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+// Create a wrapper component that injects router props
+function WithRouterWrapper(props) {
+  const navigate = useNavigate();
+
+  return <App {...props} navigate={navigate} />;
+}
+
+export default WithRouterWrapper;

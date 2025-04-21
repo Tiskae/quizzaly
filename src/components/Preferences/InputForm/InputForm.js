@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import * as classes from "./InputForm.module.css";
+import classes from "./InputForm.module.css";
 import Button from "../../../UI/Button/Button";
 import InputField from "../../../UI/InputField/InputField";
 import SelectField from "../../../UI/SelectField/SelectField";
@@ -10,7 +9,7 @@ import * as helpers from "../../../Helpers";
 import Modal from "../../../UI/Modal/Modal";
 import AppContext from "../../../Contexts/AppContext";
 import Instructions from "./Instructions/Instructions";
-
+import { useNavigate } from "react-router-dom";
 
 class InputForm extends Component {
   state = {
@@ -35,16 +34,14 @@ class InputForm extends Component {
         ],
         defaultOption: "Choose",
       },
-      
-      
+
       selectType: {
         options: [
           { displayName: "Any", value: "any" },
           { displayName: "Multiple Choice", value: "multiple" },
           { displayName: "True / False", value: "boolean" },
         ],
-        defaultOptiom: {displayName: "Choose", value:"choose"}
-
+        defaultOptiom: { displayName: "Choose", value: "choose" },
       },
       numberOfQuestion: {
         options: [10, 15, 20],
@@ -69,9 +66,7 @@ class InputForm extends Component {
   static contextType = AppContext;
 
   setTracksFromFetchedData = (data) => {
-    return data
-      .map((el) => el.name)
-      .sort((prev, next) => (prev > next ? 1 : -1));
+    return data.map((el) => el.name).sort((prev, next) => (prev > next ? 1 : -1));
   };
 
   fetchTracksAndIDsFromAPI = () => {
@@ -84,9 +79,7 @@ class InputForm extends Component {
           formData: {
             ...prevState.formData,
             tracks: {
-              options: this.setTracksFromFetchedData(
-                res.data.trivia_categories
-              ),
+              options: this.setTracksFromFetchedData(res.data.trivia_categories),
               defaultOption: prevState.formData.tracks.defaultOption,
             },
           },
@@ -96,8 +89,7 @@ class InputForm extends Component {
       .catch((err) => {
         this.setState({
           errorExists: true,
-          errorMessage:
-            "Couldn't fetch needed information, make sure you have internet access and try again!",
+          errorMessage: "Couldn't fetch needed information, make sure you have internet access and try again!",
         });
       });
   };
@@ -114,9 +106,7 @@ class InputForm extends Component {
 
     const track = {
       value: this.context.quizTrack,
-      id: this.context.tracksAndTheirIDs.filter(
-        (el) => el.name === this.context.quizTrack
-      )[0].id,
+      id: this.context.tracksAndTheirIDs.filter((el) => el.name === this.context.quizTrack)[0].id,
     };
 
     const newState = {
@@ -137,9 +127,7 @@ class InputForm extends Component {
         formData: {
           ...prevState.formData,
           tracks: {
-            options: this.setTracksFromFetchedData(
-              this.context.tracksAndTheirIDs
-            ),
+            options: this.setTracksFromFetchedData(this.context.tracksAndTheirIDs),
             defaultOption: prevState.formData.tracks.defaultOption,
           },
         },
@@ -193,9 +181,7 @@ class InputForm extends Component {
       this.setState({
         activeTrack: {
           value: event.target.value,
-          id: this.state.tracksAndTheirIDs.filter(
-            (el) => el.name === event.target.value
-          )[0].id,
+          id: this.state.tracksAndTheirIDs.filter((el) => el.name === event.target.value)[0].id,
         },
       });
     }
@@ -209,9 +195,7 @@ class InputForm extends Component {
     } else {
       this.setState({
         activeDifficulty: {
-          value: this.state.formData.difficulty.options.filter(
-            (el) => el.displayName === event.target.value
-          )[0].value,
+          value: this.state.formData.difficulty.options.filter((el) => el.displayName === event.target.value)[0].value,
           displayName: event.target.value,
         },
       });
@@ -227,9 +211,7 @@ class InputForm extends Component {
       this.setState({
         activeSelectType: {
           displayName: event.target.value,
-          value: this.state.formData.selectType.options.filter(
-            (el) => el.displayName === event.target.value
-          )[0].value,
+          value: this.state.formData.selectType.options.filter((el) => el.displayName === event.target.value)[0].value,
         },
       });
     }
@@ -273,9 +255,6 @@ class InputForm extends Component {
   };
 
   closeModalHandler = () => {
-    console.log("Reloaded!!!!!");
-    // this.props.history.push("/preferences");
-    console.log(this.props);
     this.setState({ errorExists: false, errorMessage: null });
     this.fetchTracksAndIDsFromAPI();
   };
@@ -291,7 +270,7 @@ class InputForm extends Component {
     if (this.state.errorExists) return;
 
     this.pushDataToParentEl();
-    this.props.history.push("/questions");
+    this.props.navigate("/questions");
   };
 
   render() {
@@ -300,8 +279,7 @@ class InputForm extends Component {
         options={this.state.formData.tracks.options}
         changed={this.trackChangedHandler}
         defaultOpt={
-          this.state.activeTrack.value &&
-          (this.state.userInfoSubmitted || this.state.visitedSlide2)
+          this.state.activeTrack.value && (this.state.userInfoSubmitted || this.state.visitedSlide2)
             ? this.state.activeTrack.value
             : this.state.formData.tracks.defaultOption
         }
@@ -310,12 +288,9 @@ class InputForm extends Component {
 
     const difficultyFieldsArr = (
       <SelectField
-        options={this.state.formData.difficulty.options.map(
-          (el) => el.displayName
-        )}
+        options={this.state.formData.difficulty.options.map((el) => el.displayName)}
         defaultOpt={
-          this.state.activeDifficulty.displayName &&
-          (this.state.userInfoSubmitted || this.state.visitedSlide2)
+          this.state.activeDifficulty.displayName && (this.state.userInfoSubmitted || this.state.visitedSlide2)
             ? this.state.activeDifficulty.displayName
             : this.state.formData.difficulty.defaultOption
         }
@@ -325,12 +300,9 @@ class InputForm extends Component {
 
     const selectTypeField = (
       <SelectField
-        options={this.state.formData.selectType.options.map(
-          (el) => el.displayName
-        )}
+        options={this.state.formData.selectType.options.map((el) => el.displayName)}
         defaultOpt={
-          this.state.activeSelectType.displayName &&
-          this.state.userInfoSubmitted
+          this.state.activeSelectType.displayName && this.state.userInfoSubmitted
             ? this.state.activeSelectType.displayName
             : this.state.formData.selectType.defaultOptiom.displayName
         }
@@ -342,8 +314,7 @@ class InputForm extends Component {
       <SelectField
         options={this.state.formData.numberOfQuestion.options}
         defaultOpt={
-          this.state.activeNumberofQuestions.value &&
-          this.state.userInfoSubmitted
+          this.state.activeNumberofQuestions.value && this.state.userInfoSubmitted
             ? this.state.activeNumberofQuestions.value
             : this.state.formData.numberOfQuestion.defaultOption
         }
@@ -373,13 +344,7 @@ class InputForm extends Component {
         </div>
         <Button
           btnType="isSecondary"
-          disabled={
-            !(
-              this.state.username &&
-              this.state.activeTrack.value &&
-              this.state.activeDifficulty.value
-            )
-          }
+          disabled={!(this.state.username && this.state.activeTrack.value && this.state.activeDifficulty.value)}
           clicked={this.moveToNextSlide}
         >
           Next
@@ -403,12 +368,7 @@ class InputForm extends Component {
         </div>
         <Button
           btnType="isSecondary"
-          disabled={
-            !(
-              this.state.activeSelectType.value &&
-              this.state.activeNumberofQuestions.value
-            )
-          }
+          disabled={!(this.state.activeSelectType.value && this.state.activeNumberofQuestions.value)}
           clicked={this.toggleInstructions}
         >
           Submit
@@ -419,11 +379,7 @@ class InputForm extends Component {
     let content = <Loader color="secondary" />;
 
     let errorModal = this.state.errorExists ? (
-      <Modal
-        message={this.state.errorMessage}
-        modalCTA={this.closeModalHandler}
-        btnLabel="Retry"
-      />
+      <Modal message={this.state.errorMessage} modalCTA={this.closeModalHandler} btnLabel="Retry" />
     ) : null;
 
     if (this.state.formData.tracks.options) {
@@ -448,9 +404,7 @@ class InputForm extends Component {
         <h2>Let's dive right in!</h2>
         <div className={classes.SlideIndicator}>
           <span className={classes.Active}></span>
-          <span
-            className={this.state.activeSlide === 2 ? classes.Active : null}
-          ></span>
+          <span className={this.state.activeSlide === 2 ? classes.Active : null}></span>
         </div>
         {content}
         {errorModal}
@@ -460,4 +414,11 @@ class InputForm extends Component {
   }
 }
 
-export default withRouter(InputForm);
+// Create a wrapper component that injects router props
+function WithRouterWrapper(props) {
+  const navigate = useNavigate();
+
+  return <InputForm {...props} navigate={navigate} />;
+}
+
+export default WithRouterWrapper;

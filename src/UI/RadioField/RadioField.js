@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./RadioField.module.css";
+import classes from "./RadioField.module.css";
 
 const radioField = (props) => {
   const inputClassesArr = [classes.RadioInput];
