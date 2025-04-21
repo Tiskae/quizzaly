@@ -2,7 +2,7 @@
   "name": "quiz-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://tiskae.github.io/quizzaly",
+  "homepage": ".",
   "dependencies": {
     "@emotion/styled": "^11.14.0",
     "@testing-library/jest-dom": "^6.6.3",
