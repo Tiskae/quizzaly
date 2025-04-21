@@ -8,7 +8,7 @@ const Instructions = (props) => {
     `You have ${helper.TIME_FOR_A_QUESTION} seconds for each question`,
     "Once the timer runs out, you will be moved to the next question and will score zero point for that question",
     "Every correct answer gains you 1 point",
-    "Every incorrect answer ( '... kokowa...' ) gains you zero point",
+    "Every incorrect answer gains you zero point",
     "You cannot pause the game, so ensure you have at least the estimated time stated below",
     "Do not reload the browser once you've started the quiz, all quiz progress will be lost",
   ];

@@ -60,7 +60,7 @@ const AuthorInfo = () => {
       </p>
 
       <div className={contentClasses.join(" ")}>
-        <p>Hey! I'm Tiskae, a software developer. This app was built with ❤️ from Nigeria. &copy; 2024</p>
+        <p>Hey! I'm Ibrahim, a software developer. This app was built with ❤️ from Nigeria. &copy; 2025</p>
         <Button btnType="inline" clicked={() => navigateToLeaderboard()} disabled={state.shareSuccessMessage}>
           View Leaderboard
         </Button>
@@ -68,7 +68,7 @@ const AuthorInfo = () => {
           Share quiz
         </Button>
 
-        <a href="https://tiskae.codes" target="_blank" rel="noreferrer">
+        <a href="https://tiskae.netlify.app" target="_blank" rel="noreferrer">
           <Button btnType="isPrimary">contact me</Button>
         </a>
       </div>
