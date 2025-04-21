@@ -12,7 +12,7 @@ const AuthorInfo = () => {
     shareSuccessMessage: "",
   });
 
-  const navigate = useNavigate;
+  const navigate = useNavigate();
 
   const navigateToLeaderboard = () => navigate("/leaderboard");
 

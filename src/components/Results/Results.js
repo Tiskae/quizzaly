@@ -2,9 +2,12 @@ import React, { useContext } from "react";
 import AppContext from "../../Contexts/AppContext";
 import classes from "./Results.module.css";
 import Button from "../../UI/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const Results = (props) => {
   const context = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   return (
     <div className={classes.Results}>
@@ -24,10 +27,10 @@ const Results = (props) => {
           <span>{(context.finalScore / context.noOfQuestions.value).toFixed(2) * 100}%</span>
         </p>
         <div className={classes.BtnContainer}>
-          <Button btnType="isPrimary" clicked={() => props.history.push("/preferences")}>
+          <Button btnType="isPrimary" clicked={() => navigate("/preferences")}>
             Play again
           </Button>
-          <Button btnType="isSecondary" clicked={() => props.history.push("/leaderboard")}>
+          <Button btnType="isSecondary" clicked={() => navigate("/leaderboard")}>
             View Leaderboard
           </Button>
         </div>
