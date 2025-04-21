@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as classes from "./Timer.module.css";
+import classes from "./Timer.module.css";
 import * as helper from "../../Helpers";
 import Countdown, { zeroPad } from "react-countdown";
 
@@ -24,9 +24,7 @@ const Timer = (props) => {
           key={key}
           renderer={({ _, minutes, seconds }) => (
             <p className={seconds <= 10 ? classes.Red : null}>
-              {seconds > 0
-                ? `${zeroPad(minutes)}:${zeroPad(seconds)}`
-                : "Time's up!"}
+              {seconds > 0 ? `${zeroPad(minutes)}:${zeroPad(seconds)}` : "Time's up!"}
             </p>
           )}
         />

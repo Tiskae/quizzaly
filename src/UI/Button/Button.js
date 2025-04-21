@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./Button.module.css";
+import classes from "./Button.module.css";
 
 const button = (props) => {
   const btnClasses = [classes.Button];
@@ -15,11 +15,7 @@ const button = (props) => {
   }
 
   return (
-    <button
-      className={btnClasses.join(" ")}
-      onClick={props.clicked ? props.clicked : null}
-      disabled={props.disabled}
-    >
+    <button className={btnClasses.join(" ")} onClick={props.clicked ? props.clicked : null} disabled={props.disabled}>
       {props.children}
     </button>
   );

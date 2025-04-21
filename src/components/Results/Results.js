@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import AppContext from "../../Contexts/AppContext";
-import * as classes from "./Results.module.css";
+import classes from "./Results.module.css";
 import Button from "../../UI/Button/Button";
 
 const Results = (props) => {
@@ -21,23 +21,13 @@ const Results = (props) => {
             {context.finalScore} of {context.noOfQuestions.value}
           </span>{" "}
           questions right and your score is{" "}
-          <span>
-            {(context.finalScore / context.noOfQuestions.value).toFixed(2) *
-              100}
-            %
-          </span>
+          <span>{(context.finalScore / context.noOfQuestions.value).toFixed(2) * 100}%</span>
         </p>
         <div className={classes.BtnContainer}>
-          <Button
-            btnType="isPrimary"
-            clicked={() => props.history.push("/preferences")}
-          >
+          <Button btnType="isPrimary" clicked={() => props.history.push("/preferences")}>
             Play again
           </Button>
-          <Button
-            btnType="isSecondary"
-            clicked={() => props.history.push("/leaderboard")}
-          >
+          <Button btnType="isSecondary" clicked={() => props.history.push("/leaderboard")}>
             View Leaderboard
           </Button>
         </div>

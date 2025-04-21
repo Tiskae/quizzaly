@@ -1,5 +1,5 @@
 import React from "react";
-import * as classes from "./Instructions.module.css";
+import classes from "./Instructions.module.css";
 import Button from "../../../../UI/Button/Button";
 import * as helper from "../../../../Helpers";
 
@@ -37,11 +37,7 @@ const Instructions = (props) => {
             <li>Mode of options: {props.selectType}</li>
             <li>Number of questions: {props.noOfQuestions}</li>
             <li>
-              Estimated quiz time:{" "}
-              {(
-                (props.noOfQuestions * helper.TIME_FOR_A_QUESTION) /
-                60
-              ).toFixed(1) + " minutes"}
+              Estimated quiz time: {((props.noOfQuestions * helper.TIME_FOR_A_QUESTION) / 60).toFixed(1) + " minutes"}
             </li>
           </ul>
         </div>
