@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import classes from "./Leaderboard.module.css";
 import Loader from "../../UI/Loader/Loader";
@@ -28,11 +28,7 @@ const Leaderboard = () => {
 
   const context = useContext(AppContext);
 
-  useEffect(() => {
-    fetchLeaderboardFromCloud();
-  }, []);
-
-  const fetchLeaderboardFromCloud = () => {
+  const fetchLeaderboardFromCloud = useCallback(() => {
     axios
       .get(`${helper.DATABASE_URL}/results.json`)
       .then((res) => {
@@ -53,7 +49,7 @@ const Leaderboard = () => {
 
         let userPosition = null;
         if (!isUserOnLeaderboard && context.username) {
-          const user_percentage = (context.finalScore / context.noOfQuestions.value).toFixed(2) * 100;
+          // const user_percentage = (context.finalScore / context.noOfQuestions.value).toFixed(2) * 100;
           const userPositionInFetchedList = sortedResultsArr.findIndex((el) => el.user_id === context.userId);
           userPosition = userPositionInFetchedList !== -1 ? userPositionInFetchedList : "-";
         }
@@ -76,7 +72,11 @@ const Leaderboard = () => {
           fetchLeaderboardErrorMsg: err.message,
         });
       });
-  };
+  }, [context.userId, context.username, state]);
+
+  useEffect(() => {
+    fetchLeaderboardFromCloud();
+  }, [fetchLeaderboardFromCloud]);
 
   const modalCTA = () => {
     setState({ ...state, errorExists: false });
