@@ -72,7 +72,8 @@ const Leaderboard = () => {
           fetchLeaderboardErrorMsg: err.message,
         });
       });
-  }, [context.userId, context.username, state]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.userId, context.username]);
 
   useEffect(() => {
     fetchLeaderboardFromCloud();
